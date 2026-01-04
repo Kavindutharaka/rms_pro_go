@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sales</title>
+
+    <link href="../css/site.css" rel="stylesheet" />
+    <link href="../css/report.css" rel="stylesheet" />
+    <script src="../lib/signalr.js"></script>
+    <script src="../support/angular.min.js"></script>
+    <script src="./DayEnd.js?t=151515"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
+    <div>
+        <div style="margin:5px;">
+            <div style="font-size: 30px; color: #00ffff; display: inline-block;">DayEnd </div>            
+
+        </div>
+    </div>
+    <div class="card">
+        <table style="width:99%;">
+            <tr>
+                <td style="width: 30%; padding: 10px;border:solid 1px; vertical-align: top;">
+                    <button type="button" class="button" ng-click="p_dayS(1)" ng-class="{bnt_o:dp == 1}">DayEnd's</button>
+                    <button type="button" class="button" ng-click="p_dayS(2)" ng-class="{bnt_o:dp == 2}">DayEnd User</button>
+                    <div ng-show="dp == 1">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>                                    
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in dayend_lst_all" ng-class="{ bnt_o:ee.sel == 1}" ng-click="view_2(ee)">
+                                     
+                                    <td>{{ee.dt | date:'yyyy/MMM/dd'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div  ng-show="dp == 2">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in dayend_lst" ng-class="{ bnt_o:ee.sel == 1}" ng-click="view(ee)">
+                                    <td>{{ee.n}}</td>
+                                    <td>{{ee.dt | date:'yyyy/MMM/dd'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td style="padding: 10px;vertical-align:top;">
+
+                    <div style="margin:5px;">
+                        <button type="button" class="button" ng-click="p_loa(1)" ng-class="{bnt_o:p == 1}">Invoice's</button>
+                        <button type="button" class="button" ng-click="p_loa(2)" ng-class="{bnt_o:p == 2}">All Item's</button>
+                        <button type="button" class="button" ng-click="p_loa(3)" ng-class="{bnt_o:p == 3}">Kitchen Item's</button>
+                        <button type="button" class="button" ng-click="p_loa(4)" ng-class="{bnt_o:p == 4}">Beverages</button>
+
+                    </div>
+                    <div ng-show="p == 1">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice</th>
+                                    <th>Type</th>
+                                    <th>Date Time</th>
+                                    <th>Total</th>
+                                    <th>Cash</th>
+                                    <th>Card</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in DayEndInv | filter:sarch">
+                                    <td>{{ee.inv}}</td>
+                                    <td>{{ee.typ_n}}</td>
+                                    <td>{{ee.dt | date:'yyyy/MMM/dd h:mm a'}}</td>
+                                    <td style="text-align:right;">{{ee.endTot | currency :''}}</td>
+                                    <td style="text-align:right;">{{ee.cash | currency :''}}</td>
+                                    <td style="text-align:right;">{{ee.card | currency :''}}</td>
+                                </tr>
+                                <tr style="font-weight:bolder;">
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total</td>
+                                    <td style="text-align:right;">{{endTot | currency :''}}</td>
+                                    <td style="text-align:right;">{{cash | currency :''}}</td>
+                                    <td style="text-align:right;">{{card | currency :''}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="p == 2">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in DayEndInvData">
+                                    <td>{{$index+1}}</td>
+                                    <td style="text-align:left;">{{ee.pn}}</td>
+                                    <td style="text-align:right;">{{ee.q}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="p == 3">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in kich">
+                                    <td>{{$index+1}}</td>
+                                    <td style="text-align:left;">{{ee.pn}}</td>
+                                    <td style="text-align:right;">{{ee.q}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="p == 4">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in bema">
+                                    <td>{{$index+1}}</td>
+                                    <td style="text-align:left;">{{ee.pn}}</td>
+                                    <td style="text-align:right;">{{ee.q}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+      
+    </div>
+   
+
+</body>
+
+</html>

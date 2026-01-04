@@ -1,0 +1,42 @@
+﻿.phv_card {
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+    background-color: #ffffff;
+    border: solid 1px #00ff90;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 3px 3px 3px #0094ff;
+    cursor:pointer;
+}
+
+
+
+.input-group {
+    margin-top: 5px;
+    display: flex;
+    align-content: stretch;
+}
+
+    .input-group > input {
+        flex: 1 0 auto;
+        text-align: right;
+        padding: 5px;
+    }
+
+    .input-group > select {
+        flex: 1 0 auto;
+        text-align: right;
+        padding: 5px;
+    }
+
+.input-group-addon {
+    border-radius: 5px 0 0 5px;
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 5px;
+    min-width: 120px;
+}
+.bg_o {
+    background-color: #ffd800;
+}

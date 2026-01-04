@@ -1,0 +1,64 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="./ico.ico">
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="./lib/signalr.js"></script>
+    <script src="./support/angular.min.js"></script>
+    <script src="./angi/Home.js?844456987"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl" id="body">
+    <nav class="navbar">
+        <!-- LOGO -->
+        <div class="logo">RMS Pro [ {{dn}} ]</div>
+
+        <!-- NAVIGATION MENU -->
+        <ul class="nav-links">
+
+            <!-- USING CHECKBOX HACK -->
+            <input type="checkbox" id="checkbox_toggle" />
+            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+            <!-- NAVIGATION MENUS -->
+            <div class="menu">
+
+            <li><a href="#" ng-click="go_to('./admin/admin')">Home</a></li>
+            <li class="services">
+                <a href="#">Master</a>
+
+                <!-- DROPDOWN MENU -->
+                <ul class="dropdown">
+                    <li><a ng-click="go_to('./admin/Category')">Category</a></li>
+                    <li><a ng-click="go_to('./admin/Products')">Products</a></li>
+                    <li><a ng-click="go_to('./admin/Tables')">Tables</a></li>
+                    <li><a ng-click="go_to('./admin/Chef')">Chef's List</a></li>
+                    <li><a href="cashier.html">Billing</a></li>
+                    <li><a href="waiter.html">Table Booking</a></li>
+                </ul>
+
+            </li>
+            <li class="services">
+                <a href="#">Reports</a>
+
+                <!-- DROPDOWN MENU -->
+                <ul class="dropdown">
+                    <li><a ng-click="go_to('./Reports/DayEnd')">DayEnd</a></li>
+                    <li><a ng-click="go_to('./Reports/c_inv')">Current Invoice</a></li>
+                </ul>
+
+            </li>
+
+            <li><a ng-click="exit()" style="cursor:pointer;">LOG-OUT</a></li>
+            </div>
+        </ul>
+    </nav>
+    <iframe ng-src="{{currentProjectUrl}}"  id="ifem"> <!--content--> </iframe> 
+</body>
+
+</html>

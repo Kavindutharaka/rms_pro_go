@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sales</title>
+
+    <link href="../css/site.css" rel="stylesheet" />
+    <link href="../css/report.css" rel="stylesheet" />
+    <script src="../lib/signalr.js"></script>
+    <script src="../support/angular.min.js"></script>
+    <script src="./c_inv.js?t=11010"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
+    <div>
+        <div style="margin:5px;">
+            <div style="font-size: 30px; color: #00ffff; display: inline-block;">Current Invoice </div>
+
+        </div>
+    </div>
+    <div class="card">
+        <table style="width:99%;">
+            <tr>
+                <td style="width: 60%; padding: 10px; vertical-align: top;">
+                    <div>
+                        <button type="button" class="button" ng-click="p_loa2(1)" ng-class="{bnt_o:pp == 1}">Invoice's</button>
+                        <button type="button" class="button" ng-click="p_loa2(2)" ng-class="{bnt_o:pp == 2}">By Users</button>
+                        <button type="button" class="button" style="color:red;" ng-click="delInv()">Del INV</button>
+                        <button type="button" class="button" style="color:orange;" ng-click="do_dayEnd()">Do DayEnd</button>
+                    </div>
+                    <div ng-show="pp == 1">
+                        <h3>All Invoice's</h3>
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice</th>
+                                    <th>Type</th>
+                                    <th>Date Time</th>
+                                    <th>Total</th>
+                                    <th>Cash</th>
+                                    <th>Card</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in CurrentInvLst | filter:sarch" ng-class="{  bnt_o: ee.sel == 1}" ng-click="load_data_01(ee)">
+                                    <td>{{ee.inv}}</td>
+                                    <td>{{ee.typ_n}}</td>
+                                    <td>{{ee.dt | date:'h:mm a'}}</td>
+                                    <td style="text-align:right;">{{ee.endTot | currency :''}}</td>
+                                    <td style="text-align:right;">{{ee.cash | currency :''}}</td>
+                                    <td style="text-align:right;">{{ee.card | currency :''}}</td>
+                                </tr>
+                                <tr style="font-weight:bolder;">
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total</td>
+                                    <td style="text-align:right;">{{endTot | currency :''}}</td>
+                                    <td style="text-align:right;">{{cash | currency :''}}</td>
+                                    <td style="text-align:right;">{{card | currency :''}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="pp == 2">
+                        <h3>User Wise Invoice's</h3>
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in dayend_lst" ng-class="{ bnt_o:ee.sel == 1}" ng-click="view(ee)">
+                                    <td>{{ee.n}}</td>
+                                    <td>{{ee.dt | date:'yyyy/MMM/dd'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td style="padding: 10px;vertical-align:top;">
+
+                    <div style="margin:5px;">
+                        <button type="button" class="button" ng-click="p_loa(1)" ng-class="{bnt_o:p == 1}">Invoice's</button>
+                        <button type="button" class="button" ng-click="p_loa(2)" ng-class="{bnt_o:p == 2}">All Item's</button>
+                        <button type="button" class="button" ng-click="p_loa(3)" ng-class="{bnt_o:p == 3}">Kitchen Item's</button>
+                        <button type="button" class="button" ng-click="p_loa(4)" ng-class="{bnt_o:p == 4}">Beverages</button>
+
+                    </div>
+                    <div>
+                        <button type="button" class="button" ng-click="print()" ng-show="InvDataV.length > 0">Print</button>
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in InvDataV">
+                                    <td>{{$index+1}}</td>
+                                    <td style="text-align:left;">{{ee.pn}}</td>
+                                    <td style="text-align:right;">{{ee.q}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="p == 2">
+
+                    </div>
+                    <div ng-show="p == 3">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in kich">
+                                    <td>{{$index+1}}</td>
+                                    <td style="text-align:left;">{{ee.pn}}</td>
+                                    <td style="text-align:right;">{{ee.q}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="p == 4">
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ee in bema">
+                                    <td>{{$index+1}}</td>
+                                    <td style="text-align:left;">{{ee.pn}}</td>
+                                    <td style="text-align:right;">{{ee.q}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div ng-hide="true">
+        <div id="print" style="width:500px;text-align:center;border:solid 1px;">
+            <img src="../logo_bnw.png" style="width:250px;" />
+            <div style="font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No 120, Baladaksha Mawatha, Colombo 1.</div>
+            <div style="font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0777 931 639 / 0777 931 683</div>
+            <div style="font-size:14px;padding-bottom:5px;border-bottom:solid 2px;margin-top:10px;">{{dt}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #{{invoice_no}}</div>
+            <div style="font-size:14px;margin-top:20px;"></div>
+            <div style="margin-right:10px;">
+                <div ng-repeat="x in bill">
+                    <div style="font-size:14px;padding:5px 0 0 0;font-weight:bolder;">{{x.pn}}</div>
+                    <div>
+                        <div style="font-size:14px;padding:0 0 5px 0;display:inline-block;"><div style="display:inline-block;">{{x.dis_v}}</div> X {{x.q}}</div>
+                        <div style="font-size: 14px; display: inline-block; float: right">{{x.tot | currency:'':2}}</div>
+                    </div>
+                </div>
+                <div style="width: 99%; border-top: solid 2px; margin-top: 5px;"></div>
+                <div style="margin-top:5px;" ng-repeat="xx in bill_poot">
+                    <div style="font-size:14px;display:inline-block;">{{xx.n}}</div>
+                    <div style="font-size: 14px; display: inline-block;float: right;font-weight:bolder;">{{xx.v | currency:''}}</div>
+                </div>
+                <!--<div style="margin-top: 5px;">
+                    <div style="font-size:14px;display:inline-block;">Total</div>
+                    <div style="font-size: 14px; display: inline-block;float: right">{{total | currency:''}}</div>
+                </div>
+                <div style="margin-top:5px;">
+                    <div style="font-size:14px;display:inline-block;">Service Fee {{service_fee}}%</div>
+                    <div style="font-size: 14px; display: inline-block;float: right">{{serv_chg | currency:''}}</div>
+                </div>
+                <div style="margin-top:5px;">
+                    <div style="font-size:16px;display:inline-block;font-weight:bolder;">Grand Total</div>
+                    <div style="font-size: 16px; display: inline-block; font-weight: bolder; float: right">{{grand_tot | currency:''}}</div>
+                </div>-->
+                <div style="margin-top:5px;width:99%;text-align:center !important;">
+                    <div style="font-size:14px;">THANK YOU !</div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>

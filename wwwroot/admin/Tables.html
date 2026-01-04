@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Tables</title>
+    <link rel="icon" type="image/x-icon" href="../ico.ico"> 
+    <link href="../css/com.css" rel="stylesheet" />
+    <script src="../support/angular.min.js"></script>
+    <script src="./Tables.js"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
+    <div class="card">
+        <strong>Add Or Edit Tables</strong>
+
+        <div></div>
+        <div class="row">
+            <div class="column">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Name
+                    </span>
+                    <input type="text" ng-model="n" style="text-align:center !important;">
+
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Status
+                    </span>
+                    <select ng-model="s" style="text-align:center !important;">
+                        <option value="1">On</option>
+                        <option value="2">Off</option> 
+                    </select>
+                </div>
+                <div style="text-align:center; width:100%;color:red;padding:5px;" ng-show="msg_d">
+                    {{msg}}
+                </div>
+                <div class="input-group">
+                    <button style="margin-left:120px;" class="bnt_g" ng-disabled="n == '' || n == null || n.length < 1" ng-click="change()">{{btn_txt}}</button>
+                    <button style="margin-left:10px;" class="bnt_o" ng-click="new_data()">New</button>
+                </div>
+
+
+                <!--<div class="input-group">
+        <span class="input-group-addon">
+            Name
+        </span>
+        <input type="text" value="4.99">
+        <button>Go</button>
+    </div>-->
+
+
+            </div>
+            <div class="column">
+             <table class="fl-table">
+                 <thead>
+                     <tr>
+                         <th>Name</th><th>Status</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr ng-repeat="ee in cat_lst" ng-click="view(ee)">
+                         <td>{{ee.n}}</td>
+                         <td>{{ee.si}}</td>
+                     </tr>
+                 </tbody>
+             </table>
+            </div>
+        </div>
+
+       
+
+        <!--<p>W <strong>Glassmorphism UI design</strong> trend.</p>
+        <p class="card-footer">Created by Rahul C.</p>-->
+    </div>
+
+</body>
+
+</html>

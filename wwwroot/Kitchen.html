@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Kitchen</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/11.1.0/jsrsasign-all-min.js"></script>
+    <script src="support/qz-tray.js"></script>
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/stiki.css" rel="stylesheet" />
+    <script src="./lib/signalr.js"></script>
+    <script src="./support/angular.min.js"></script>
+    <script src="./angi/Kitchen.js?t=525264"></script>
+    <script src="./support/print.js"></script>
+
+    <style>
+
+
+        .p2 {
+            font-size: 40px;
+            font-family: serif;
+            color: transparent;
+            text-align: center;
+            animation: effect 2s linear infinite;
+        }
+
+        @keyframes effect {
+            0% {
+                background: linear-gradient(#008000, #00FF00);
+                -webkit-background-clip: text;
+            }
+
+            100% {
+                background: linear-gradient(#3CE7D7, #000FFF);
+                -webkit-background-clip: text;
+            }
+        }
+
+       
+
+       
+        @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+            .checkbox-wrapper-14 input[type=checkbox]
+
+        {
+            --active: #275EFE;
+            --active-inner: #fff;
+            --focus: 2px rgba(39, 94, 254, .3);
+            --border: #BBC1E1;
+            --border-hover: #275EFE;
+            --background: #fff;
+            --disabled: #F6F8FF;
+            --disabled-inner: #E1E6F9;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            height: 21px;
+            outline: none;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            margin: 0;
+            cursor: pointer;
+            border: 1px solid var(--bc, var(--border));
+            background: var(--b, var(--background));
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+        }
+
+        .checkbox-wrapper-14 input[type=checkbox]:after {
+            content: "";
+            display: block;
+            left: 0;
+            top: 0;
+            position: absolute;
+            transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+        }
+
+        .checkbox-wrapper-14 input[type=checkbox]:checked {
+            --b: var(--active);
+            --bc: var(--active);
+            --d-o: .3s;
+            --d-t: .6s;
+            --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+        }
+
+        .checkbox-wrapper-14 input[type=checkbox]:disabled {
+            --b: var(--disabled);
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+            .checkbox-wrapper-14 input[type=checkbox]:disabled:checked {
+                --b: var(--disabled-inner);
+                --bc: var(--border);
+            }
+
+            .checkbox-wrapper-14 input[type=checkbox]:disabled + label {
+                cursor: not-allowed;
+            }
+
+        .checkbox-wrapper-14 input[type=checkbox]:hover:not(:checked):not(:disabled) {
+            --bc: var(--border-hover);
+        }
+
+        .checkbox-wrapper-14 input[type=checkbox]:focus {
+            box-shadow: 0 0 0 var(--focus);
+        }
+
+        .checkbox-wrapper-14 input[type=checkbox]:not(.switch) {
+            width: 21px;
+        }
+
+            .checkbox-wrapper-14 input[type=checkbox]:not(.switch):after {
+                opacity: var(--o, 0);
+            }
+
+            .checkbox-wrapper-14 input[type=checkbox]:not(.switch):checked {
+                --o: 1;
+            }
+
+        .checkbox-wrapper-14 input[type=checkbox] + label {
+            display: inline-block;
+            vertical-align: middle;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .checkbox-wrapper-14 input[type=checkbox]:not(.switch) {
+            border-radius: 7px;
+        }
+
+            .checkbox-wrapper-14 input[type=checkbox]:not(.switch):after {
+                width: 5px;
+                height: 9px;
+                border: 2px solid var(--active-inner);
+                border-top: 0;
+                border-left: 0;
+                left: 7px;
+                top: 4px;
+                transform: rotate(var(--r, 20deg));
+            }
+
+            .checkbox-wrapper-14 input[type=checkbox]:not(.switch):checked {
+                --r: 43deg;
+            }
+
+        .checkbox-wrapper-14 input[type=checkbox].switch {
+            width: 38px;
+            border-radius: 11px;
+        }
+
+            .checkbox-wrapper-14 input[type=checkbox].switch:after {
+                left: 2px;
+                top: 2px;
+                border-radius: 50%;
+                width: 17px;
+                height: 17px;
+                background: var(--ab, var(--border));
+                transform: translateX(var(--x, 0));
+            }
+
+            .checkbox-wrapper-14 input[type=checkbox].switch:checked {
+                --ab: var(--active-inner);
+                --x: 17px;
+            }
+
+            .checkbox-wrapper-14 input[type=checkbox].switch:disabled:not(:checked):after {
+                opacity: 0.6;
+            }
+
+        }
+
+        .checkbox-wrapper-14 * {
+            box-sizing: inherit;
+        }
+
+            .checkbox-wrapper-14 *:before,
+            .checkbox-wrapper-14 *:after {
+                box-sizing: inherit;
+            }
+    </style>
+
+     
+
+</head>
+ 
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
+    <!--<button type="button" class="btn_04" ng-click="phv_test()">LOAD</button>-->
+    <audio id="mySound" autoplay>
+        <source src="./audio/sound.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+
+    <div ng-show="new_i == 1" style="position:absolute;background-color:aqua;padding:5px;font-size:20px;width:300px;margin-left:40%;text-align:center;border-radius:5px;">
+        <div class="p2">NEW Item ..</div>
+    </div>
+    <div>
+        <div style="margin:5px;">
+            <div style="font-size: 30px; color: #00ffff; display: inline-block;">Kitchen</div>
+            <!--<div style="margin:5px;display:inline-block;">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        Chef :
+                    </span>
+                    <select ng-model="chef_id" style="text-align:center !important;">
+                        <option ng-repeat="xx in cheh_lst" value={{xx.sysID}}>{{xx.dn}}</option>
+
+                    </select>
+                </div>
+
+            </div>
+            <div style="margin:5px;display:inline-block;">
+                <div class="checkbox-wrapper-14">
+                    <input id="s1-14" type="checkbox" class="switch" ng-model="ap">
+                    <label for="s1-14"> Auto Print</label>
+                </div>
+            </div>-->
+
+            <!--<div style="margin-top:5px;">
+                <button type="button" class="w_btn_02" ng-repeat="xx in PendingByLo" ng-click="sel_tb(xx)"><p>{{xx.pn}}</p><p style="font-size:0.7em;">{{xx.un}}</p></button>
+            </div>-->
+
+
+
+        </div>
+
+    </div>
+
+    <div style="margin:5px 0 5px 0;background-color:#ff6a00;width:150px;font-weight:bolder;font-size:26px;" ng-show="new_pen_invLst.length > 0">
+        Ongoing
+    </div>
+    <div class="phv_card  bg_o" ng-repeat="xx in new_pen_invLst" style="vertical-align:top;">
+        <div>
+            <h3> {{xx.oT_n}} </h3>
+            <h3> {{xx.un}}&nbsp {{xx.tbn}} </h3>
+            <hr />
+            <div ng-repeat="x in new_pen_kots  | filter:{ oT_ID: xx.oT_ID }">
+                <div style="display:inline-block;text-align:left;">{{x.pn}}</div>
+                <div style="display:inline-block;float:right;"> x{{x.q}}</div>
+            </div>
+        </div>
+        <div>
+            <div style="margin-bottom:10px;margin-top:10px;">
+                <!--<button type="button" class="button-10 btn_b_r" style="margin-right:10px;" ng-click="close_sel()">RePrint</button>-->
+                <button type="button" class="button-10 btn_b_c" ng-click="pending_done(xx)">Done</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div style="margin:5px;" ng-show="chef_sel.length > 0">
+        <div style="margin:5px 0 5px 0;background-color:#ffffff;width:150px;">
+
+            Staff :{{chef_n}}
+
+        </div>
+        <div>
+            <div class="phv_card bg_o" ng-repeat="xx in chef_sel" ng-click="remove_sel(xx)">
+                <div>
+                    <h4> {{xx.pn}} <a ng-show="xx.q > 1"> X {{xx.q}}</a></h4>
+                    <p>
+                        {{xx.tb_n}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom:10px;margin-top:10px;">
+            <button type="button" class="button-10 btn_b_r" style="margin-right:10px;" ng-click="close_sel()">Close</button>
+            <button type="button" class="button-10 btn_b_c" ng-click="print()">Print</button>
+        </div>
+
+    </div>
+    <div class="phv_card" ng-repeat="xx in PendingByLo" ng-click="add_item(xx)" ng-hide="xx.sel == 1">
+        <div>
+            <h3> {{xx.pn}} <a ng-show="xx.q > 1"> X {{xx.q}}</a></h3>
+
+            <p>
+                {{xx.tb_n}}
+            </p>
+        </div>
+    </div>
+
+   
+
+    <div ng-hide="true">
+        <div id="print" style="width:500px;text-align:center;border:solid 1px;">
+            <div style="font-size:14px;padding-bottom:5px;border-bottom:solid 2px;margin-top:10px;"> &nbsp; Staff : {{chef_n}} &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;{{dt}}</div>
+            <div style="font-size:14px;padding-bottom:5px;border-bottom:solid 2px;margin-top:10px;"> Item's</div>
+            <div style="font-size:14px;margin-top:20px;"></div>
+            <div style="margin-right:10px;">
+                <div ng-repeat="x in chef_sel">
+                    <div style="font-size:14px;padding:5px 0 0 0;font-weight:bolder;">{{x.pn}}</div>
+                    <div>
+                        <div style="font-size:14px;padding:0 0 5px 0;display:inline-block;">Qty : {{x.q}}</div>
+                        <div style="font-size:14px;padding:0 0 5px 0;display:inline-block;">{{x.i_c}}</div>
+                        <div style="font-size: 14px; display: inline-block; float: right">{{x.tb_n}} By : {{x.dn}}</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:5px;width:99%;text-align:center !important;">
+                    <div style="font-size:10px;">End !</div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

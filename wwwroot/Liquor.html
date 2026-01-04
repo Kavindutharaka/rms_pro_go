@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/11.1.0/jsrsasign-all-min.js"></script>
+    <script src="support/qz-tray.js"></script>
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/stiki.css" rel="stylesheet" />
+    <script src="./lib/signalr.js"></script>
+    <script src="./support/angular.min.js"></script>
+    <script src="./angi/Liquor.js?t=15"></script>
+    <script src="./support/print.js"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
+    <!--<button type="button" class="w_btn_02 bg_o" ng-click="pp()">pp</button>-->
+    <audio id="mySound" autoplay>
+        <source src="./audio/sound.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <div>
+        <div style="margin:5px;">
+            <div style="font-size: 30px; color: #00ffff; display: inline-block;">Liquor Bar</div>
+          
+            <!--<div style="margin-top:5px;">
+                <button type="button" class="w_btn_02" ng-repeat="xx in PendingByLo" ng-click="sel_tb(xx)"><p>{{xx.pn}}</p><p style="font-size:0.7em;">{{xx.un}}</p></button>
+            </div>-->
+
+
+        </div>
+    </div>
+    
+
+    <div style="margin:5px;border-top:solid 2px #ffffff;" ng-show="OngoingByLo.length > 0">
+        <div style="margin:5px 0 5px 0;background-color:#ff6a00;width:150px;font-weight:bolder;font-size:26px;">
+            Ongoing
+        </div>
+        <div>
+            <div class="phv_card bg_o" ng-repeat="xx in OngoingByLo" ng-click="item_done(xx)">
+                <div>
+                    <h4> {{xx.pn}} <a ng-show="xx.q > 1"> X {{xx.q}}</a></h4>
+                    <p>
+                        {{xx.tb_n}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+   
+</body>
+
+</html>

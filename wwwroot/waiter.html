@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sales</title>
+    <link href="css/site.css" rel="stylesheet" /> 
+    <link href="css/waiter.css" rel="stylesheet" />
+    <script src="./lib/signalr.js"></script>
+    <script src="./support/angular.min.js"></script>
+    <script src="./angi/Waiter.js?t=114450"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
+    <div class="element">
+        <div style="text-align: center;">
+            <table style="width:400px;">
+                <tr>
+                    <td style="font-size:1.5em;color:#ffffff;"> HI {{dn}}</td>
+                    <td> <button type="button" class="w_btn01 w_btn_c_b" ng-click="home_clk()">HOME</button></td>
+                    <td> <button type="button" class="w_btn01 w_btn_c_o" ng-click="exit()">Exit</button></td>
+                </tr>
+            </table>
+        </div>
+        <div style="text-align:center;margin-top:10px;padding:5px;">
+
+            <button type="button" class="btn_04" ng-click="main_btn_call(1)">Table's</button>
+            <button type="button" class="btn_04" ng-click="main_btn_call(2)">Pending</button>
+            <div ng-show="main_sel == 1">
+                <div style="margin-top:5px;" ng-show="tb_view == 1">
+                    <div>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('')">All</button>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('BG ')">Bar G</button>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('CG ')">Coffee g</button>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('VI ')">VIP</button>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('VV ')">VVIP</button>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('CP ')">Park</button>
+                        <button type="button" class="w_btn01 w_btn_c_o" ng-click="tb_search('HO ')">Horse</button>
+                    </div>
+                    <button type="button" class="w_btn_02" ng-repeat="xx in load_tb | filter:tb_search_d" ng-click="sel_tb(xx)" ng-class="{ w_Tb_bk_c: xx.u != 0}"><p>{{xx.n}}</p><p style="font-size:0.7em;">{{xx.un}}</p></button>
+                </div>
+                <div ng-show="tb_view == 2">
+                    <div style="font-size:2em;color:ghostwhite">{{seled_tb}}</div>
+                    <div class="tab">
+                        <button class="tablinks" id="b1" onclick="openCity(event, 'London')">Items</button>
+                        <button class="tablinks" onclick="openCity(event, 'Paris')">Add New</button>
+                        <button type="button" class="tablinks w_btn_c_o" ng-click="all_tb_view()">All Tables</button>
+                    </div>
+
+                    <div id="London" class="tabcontent">
+                        <h3>Items</h3>
+                        <table style="width:90%;border-collapse:collapse;">
+                            <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in item_by_tb">
+                                <td class="tb_td">{{$index+1}}</td>
+                                <td class="tb_td" style="text-align:left;">{{xx.pn}}</td>
+                                <td class="tb_td" style="text-align:right;"><div  ng-class="{line_on:xx.sp != xx.dis_v}"  ng-hide="xx.sp == xx.dis_v" style="display:inline-block;">{{xx.sp}}&nbsp;</div> <div  style="display:inline-block;">{{xx.dis_v}}</div></td>
+                                <td class="tb_td">{{xx.sn}}</td>
+                            </tr>
+                            <tr style="border:solid 1px;padding:2px;">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">Total</td>
+                                <td class="tb_td" style="text-align:right;">{{tot | currency:''}}</td>
+                                <td class="tb_td"></td>
+                            </tr>
+                            <tr style="border:solid 1px;padding:2px;">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">Service {{s_ch_v}}%</td>
+                                <td class="tb_td" style="text-align:right;">{{s_chg | currency:''}}</td>
+                                <td class="tb_td"></td>
+                            </tr>
+                            <tr style="border:solid 1px;padding:2px;">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">Total</td>
+                                <td class="tb_td" style="text-align:right;font-weight:bolder;">{{g_tot | currency:''}}</td>
+                                <td class="tb_td"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="Paris" class="tabcontent">
+                        <div style="margin:5px 0 5px 0" ng-hide="new_order == '' || new_order == null || new_order.length < 0">
+                            <div>
+                                <button type="button" class="new_ite" ng-repeat="xx in new_order" ng-click="remove_item(xx)">
+                                    <p>{{xx.n}}</p><p style="font-size:0.7em;">Rs:- {{xx.dis_v}}</p>
+                                </button>
+                            </div>
+                            <div style="margin:10px 0 10px 0;">
+                                <button type="button" class="w_btn01 w_btn_c_b" ng-click="order_save()">Order</button>
+                            </div>
+                            <hr />
+                        </div>
+
+                        <div ng-show="cat_lst">
+                            <h3>Add New</h3>
+                            <button type="button" class="cat_btn" ng-repeat="xx in load_cat" ng-click="sel_cat(xx)">{{xx.n}}</button>
+                        </div>
+                        <div ng-hide="cat_lst">
+                            <div>Items <button type="button" class="w_btn01 w_btn_c_o" ng-click="all_cat_view()">Category</button></div>
+                            <div class="input-group" style="margin:5px;">
+                                <span class="input-group-addon">
+                                    Items Comments
+                                </span>
+                                <input type="text" ng-model="i_c" style="font-size:20px;">
+                            </div>
+                            <div style="margin-top:5px;">
+                                <button type="button" class="btn_prod" ng-repeat="xx in load_pro" ng-click="add_item(xx)">
+                                    <p>{{xx.n}}</p>
+                                    <p style="font-size:0.7em;display:inline-block;">Rs:- </p>
+                                    <p style="font-size: 0.7em; display: inline-block;" ng-class="{line_on:xx.sp != xx.dis_v}">{{xx.sp}}</p>
+                                    <p style="font-size: 0.7em; display: inline-block;color:#b6ff00;" ng-hide="xx.sp == xx.dis_v">{{xx.dis_v}}</p>
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="main_sel == 2" style="margin-top:5px">
+                <table style="width:99%;border-collapse:collapse;">
+                    <tr style="border:solid 1px;padding:2px;">
+                        <td class="tb_td">#</td>
+                        <td class="tb_td" style="text-align:left;">Item</td>
+                        <td class="tb_td">Table</td>
+                        <td class="tb_td">Status</td>
+                        <td class="tb_td"></td>
+                    </tr>
+                    <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in item_by_waiter">
+                        <td class="tb_td">{{$index+1}}</td>
+                        <td class="tb_td" style="text-align:left;">{{xx.pn}}</td>
+                        <td class="tb_td">{{xx.tb_n}}</td>
+                        <td class="tb_td">{{xx.sn}}<button type="button" ng-click="iten_done(xx)" class="btn_05">DONE</button></td>
+                        <td class="tb_td">{{xx.dt | date:'h:mm a'}}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!--<button type="button" class="w_btn01" ng-click="noti()">OK</button>
+        <input type="text" ng-model="msg" />
+        <button type="button" ng-click="sendOK()">SEND</button>-->
+    </div>
+
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        document.getElementById('London').style.display = "block";
+        document.getElementById('b1').classList.add('active');
+        
+
+    </script>
+</body>
+
+</html>
