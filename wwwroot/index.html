@@ -1,64 +1,151 @@
- 
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>RMS Pro - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="./ico.ico">
-    <link href="css/site.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="./lib/signalr.js"></script>
     <script src="./support/angular.min.js"></script>
     <script src="./angi/Home.js?844456987"></script>
-
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+        #ifem {
+            width: 100%;
+            height: calc(100vh - 64px);
+            border: none;
+        }
+        /* Dropdown menu styles */
+        .dropdown-menu {
+            display: none;
+        }
+        .dropdown-parent:hover .dropdown-menu,
+        .dropdown-parent:focus-within .dropdown-menu {
+            display: block;
+        }
+        /* Mobile menu styles */
+        #mobile-menu {
+            display: none;
+        }
+        #mobile-menu.active {
+            display: block;
+        }
+    </style>
 </head>
 
-<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl" id="body">
-    <nav class="navbar">
-        <!-- LOGO -->
-        <div class="logo">RMS Pro [ {{dn}} ]</div>
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl" id="body" class="bg-gray-50">
+    <!-- Modern Navigation Bar -->
+    <nav class="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                            </div>
+                            <span class="text-white font-bold text-xl">RMS Pro</span>
+                            <span class="hidden sm:inline-block text-blue-100 text-sm bg-white/10 px-2 py-1 rounded">{{dn}}</span>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- NAVIGATION MENU -->
-        <ul class="nav-links">
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex md:items-center md:space-x-1">
+                    <!-- Home -->
+                    <a href="#" ng-click="go_to('./admin/admin')"
+                       class="text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm font-medium transition duration-150">
+                        Home
+                    </a>
 
-            <!-- USING CHECKBOX HACK -->
-            <input type="checkbox" id="checkbox_toggle" />
-            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+                    <!-- Master Dropdown -->
+                    <div class="relative dropdown-parent">
+                        <button class="text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm font-medium transition duration-150 flex items-center">
+                            Master
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-1 z-50">
+                            <a ng-click="go_to('./admin/Category')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition duration-150">Category</a>
+                            <a ng-click="go_to('./admin/Products')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition duration-150">Products</a>
+                            <a ng-click="go_to('./admin/Tables')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition duration-150">Tables</a>
+                            <a ng-click="go_to('./admin/Chef')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition duration-150">Chef's List</a>
+                            <hr class="my-1">
+                            <a href="cashier.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">Billing</a>
+                            <a href="waiter.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">Table Booking</a>
+                        </div>
+                    </div>
 
-            <!-- NAVIGATION MENUS -->
-            <div class="menu">
+                    <!-- Reports Dropdown -->
+                    <div class="relative dropdown-parent">
+                        <button class="text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm font-medium transition duration-150 flex items-center">
+                            Reports
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-1 z-50">
+                            <a ng-click="go_to('./Reports/DayEnd')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition duration-150">DayEnd</a>
+                            <a ng-click="go_to('./Reports/c_inv')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition duration-150">Current Invoice</a>
+                        </div>
+                    </div>
 
-            <li><a href="#" ng-click="go_to('./admin/admin')">Home</a></li>
-            <li class="services">
-                <a href="#">Master</a>
+                    <!-- Logout -->
+                    <button ng-click="exit()"
+                            class="ml-2 text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-medium transition duration-150 flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Logout
+                    </button>
+                </div>
 
-                <!-- DROPDOWN MENU -->
-                <ul class="dropdown">
-                    <li><a ng-click="go_to('./admin/Category')">Category</a></li>
-                    <li><a ng-click="go_to('./admin/Products')">Products</a></li>
-                    <li><a ng-click="go_to('./admin/Tables')">Tables</a></li>
-                    <li><a ng-click="go_to('./admin/Chef')">Chef's List</a></li>
-                    <li><a href="cashier.html">Billing</a></li>
-                    <li><a href="waiter.html">Table Booking</a></li>
-                </ul>
-
-            </li>
-            <li class="services">
-                <a href="#">Reports</a>
-
-                <!-- DROPDOWN MENU -->
-                <ul class="dropdown">
-                    <li><a ng-click="go_to('./Reports/DayEnd')">DayEnd</a></li>
-                    <li><a ng-click="go_to('./Reports/c_inv')">Current Invoice</a></li>
-                </ul>
-
-            </li>
-
-            <li><a ng-click="exit()" style="cursor:pointer;">LOG-OUT</a></li>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('active')"
+                            class="text-white hover:bg-white/10 p-2 rounded-lg">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </ul>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden bg-blue-700 border-t border-blue-500">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#" ng-click="go_to('./admin/admin')"
+                   class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-base font-medium">Home</a>
+
+                <div class="text-gray-200 px-3 py-2 text-xs font-semibold uppercase">Master</div>
+                <a ng-click="go_to('./admin/Category')" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Category</a>
+                <a ng-click="go_to('./admin/Products')" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Products</a>
+                <a ng-click="go_to('./admin/Tables')" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Tables</a>
+                <a ng-click="go_to('./admin/Chef')" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Chef's List</a>
+                <a href="cashier.html" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Billing</a>
+                <a href="waiter.html" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Table Booking</a>
+
+                <div class="text-gray-200 px-3 py-2 text-xs font-semibold uppercase">Reports</div>
+                <a ng-click="go_to('./Reports/DayEnd')" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">DayEnd</a>
+                <a ng-click="go_to('./Reports/c_inv')" class="block text-white hover:bg-white/10 px-3 py-2 rounded-lg text-sm pl-6">Current Invoice</a>
+
+                <button ng-click="exit()" class="w-full text-left text-white bg-red-500 hover:bg-red-600 px-3 py-2 rounded-lg text-base font-medium mt-2">Logout</button>
+            </div>
+        </div>
     </nav>
-    <iframe ng-src="{{currentProjectUrl}}"  id="ifem"> <!--content--> </iframe> 
+
+    <!-- Main Content (iframe) -->
+    <iframe ng-src="{{currentProjectUrl}}" id="ifem"></iframe>
 </body>
 
 </html>
