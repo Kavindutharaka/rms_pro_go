@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cashier</title>
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/11.1.0/jsrsasign-all-min.js"></script>
+    <script src="support/qz-tray.js"></script>
+    <script src="./lib/signalr.js"></script>
+    <link href="css/waiter.css" rel="stylesheet" />
+    <script src="./support/angular.min.js"></script>
+    <script src="./angi/cashier_t.js?t=202504545445875"></script>
+    <script src="support/print.js"></script>
+
+</head>
+
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl" style="padding:10px;">
+    <!--<button type="button" ng-click="pp()">PP</button>-->
+
+    <div id="myModal_ctb" class="modal">
+        <div class="modal-content">
+            <div style="height:60px;">
+                Table Change
+                <button class="button-10 w_btn_c_r" style="float:right;font-size:1.1em;" ng-click="change_tb_opcls()" type="button">X</button>
+            </div>
+            <div>
+                <h2>Table {{seled_tb}}</h2>
+                <div style="margin:10px 0px 10px;">
+                    <label for="newtb">New Table:</label>
+                    <select name="newtb" id="newtb" ng-model="new_tb_id">
+                        <option ng-repeat="xxx in free_tbLst" value="{{xxx.sysID}}">{{xxx.n}}</option>
+                    </select>
+                </div>
+
+                <button type="button" ng-disabled="new_tb_id == 0" class="w_btn01 w_btn_c_b" ng-click="chage_tb_do()">Change</button>
+            </div>
+        </div>
+
+    </div>
+    <div id="myModal_dend" class="modal">
+        <div class="modal-content">
+            <div style="height:60px;">
+                Day End
+                <button class="button-10 w_btn_c_r" style="float:right;font-size:1.1em;" ng-click="change_tb_opcls()" type="button">X</button>
+            </div>
+            <div>
+                <h2>System Dayend ?</h2>
+                 
+
+                <button type="button" ng-disabled="new_tb_id == 0" class="w_btn01 w_btn_c_b" ng-click="do_dayendnpow()">YES</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="myModal_b" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div style="height:60px;">
+                <button class="button-10 w_btn_c_r" style="float:right;font-size:1.1em;" ng-click="pay_panel_cls()" type="button">X</button>
+            </div>
+
+            <div>
+                <table style="width:99%;">
+                    <tr>
+                        <td style="width:60%;vertical-align:top;">
+                            <table style="width:99%;">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td>
+                                        <button class="button-10 w_btn_c_br" style="font-size:2em;" ng-class="{btn_c_or:paym == 1}" ng-click="pay_typ(1)" type="button">CASH</button>
+                                    </td>
+                                    <td>
+                                        <button class="button-10 w_btn_c_br" style="font-size:2em;" ng-class="{btn_c_or:paym == 2}" ng-click="pay_typ(2)" type="button">CARD</button>
+                                    </td>
+                                    <td>
+                                        <button class="button-10 w_btn_c_br" style="font-size:2em;" ng-class="{btn_c_or:paym == 3}" ng-click="pay_typ(3)" type="button">BOTH</button>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+
+                            <table style="width:99%;margin-top:10px;">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Total :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_amount | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;"></div>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 1">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Paid :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_cash_type | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 1">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Balance :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_balance | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"></div>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 2">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.2em;font-weight:bolder;padding:5px;">Last 4 Digits :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;height:40px;">{{pay_not}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 3">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Cash :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div ng-class="{btn_c_or:typ_po == 1}" ng-click="typ_po_chg(1)" style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_cash_type | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 3">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Card :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_balance | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:10px;"></div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 3">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size: 1.5em; font-weight: bolder; padding: 5px 0 5px 5px;">Last 4 Digits :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div ng-class="{btn_c_or:typ_po == 2}" ng-click="typ_po_chg(2)" style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;height:40px;">{{pay_not}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+
+
+                        </td>
+                        <td style="vertical-align:top;">
+                            <!--<div style="font-size:2em;font-weight:bolder;padding:5px;text-align:right;">{{bill_amount | currency:'':2}}</div>-->
+                            <div>
+                                <div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(7,1)">7</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(8,1)">8</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(9,1)">9</button>
+                                    </div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(4,1)">4</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(5,1)">5</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(6,1)">6</button>
+                                    </div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(1,1)">1</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(2,1)">2</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(3,1)">3</button>
+                                    </div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad('.',1)">.</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(0,1)">0</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad('<',0)"><</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="button-10" style="width:150px;background-color:#ffd800;margin-left:10px;font-size:1.5em;" ng-click="finish_bill_ok2()" ng-disabled="key_st" type="button">FINISH</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div style="height:60px;">
+                <button class="button-10 w_btn_c_r" style="float:right;font-size:1.5em;" ng-click="pay_panel_cls()" type="button">X</button>
+            </div>
+
+            <div>
+                <table style="width:99%;">
+                    <tr>
+                        <td style="width:60%;vertical-align:top;">
+                            <table style="width:99%;">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td>
+                                        <button class="button-10 w_btn_c_br" style="font-size:2em;" ng-class="{btn_c_or:paym == 1}" ng-click="pay_typ(1)" type="button">CASH</button>
+                                    </td>
+                                    <td>
+                                        <button class="button-10 w_btn_c_br" style="font-size:2em;" ng-class="{btn_c_or:paym == 2}" ng-click="pay_typ(2)" type="button">CARD</button>
+                                    </td>
+                                    <td>
+                                        <button class="button-10 w_btn_c_br" style="font-size:2em;" ng-class="{btn_c_or:paym == 3}" ng-click="pay_typ(3)" type="button">BOTH</button>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+
+                            <table style="width:99%;margin-top:10px;">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Total :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_amount | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;"></div>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 1">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Paid :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_cash_type | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 1">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Balance :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_balance | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"></div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 2">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Last 4 Digits :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;height:40px;">{{pay_not}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 3">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Cash :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div ng-class="{btn_c_or:typ_po == 1}" ng-click="typ_po_chg(1)" style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_cash_type | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 3">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;">Card :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;">{{bill_balance | currency:'':2}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"></div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:99%;margin-top:10px;" ng-show="paym == 3">
+                                <tr>
+                                    <td style="width:10%;"></td>
+                                    <td style="width:30%;">
+                                        <div style="font-size: 1.5em; font-weight: bolder; padding: 5px 0 5px 5px;">Last 4 Digits :</div>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <div ng-class="{btn_c_or:typ_po == 2}" ng-click="typ_po_chg(2)" style="font-size:1.5em;font-weight:bolder;padding:5px;text-align:right;border:solid 2px;height:40px;">{{pay_not}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="blink_me" style="font-size:1.5em;font-weight:bolder;padding:5px;"><=</div>
+
+                                    </td>
+                                    <td style="width:10%;"></td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td style="vertical-align:top;">
+                            <!--<div style="font-size:2em;font-weight:bolder;padding:10px;text-align:right;">{{bill_amount | currency:'':2}}</div>-->
+                            <div>
+                                <div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(7,1)">7</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(8,1)">8</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(9,1)">9</button>
+                                    </div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(4,1)">4</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(5,1)">5</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(6,1)">6</button>
+                                    </div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(1,1)">1</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(2,1)">2</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(3,1)">3</button>
+                                    </div>
+                                    <div>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad('.',1)">.</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad(0,1)">0</button>
+                                        <button class="button-10 btn_b_c num_pad" type="button" ng-click="key_pad('<',0)"><</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="button-10" style="background-color:#ffd800;margin-left:10px;width:150px;font-size:25px;" ng-click="finish_bill_ok()" ng-disabled="key_st" type="button">FINISH</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div>
+        <table style="width:99%;margin:5px 10px 0 10px">
+            <tr>
+                <td style="font-size:1.5em;color:#ffffff;"> HI {{dn}}</td>
+                <td>
+                    <button type="button" class="w_btn01 w_btn_c_b" ng-click="opra_change(1)">Take Away</button>
+                    <button type="button" class="w_btn01 w_btn_c_o" ng-click="opra_change(2)">Table's</button>
+                    <button type="button" class="w_btn01 w_btn_c_b" ng-click="opra_change(3)">Payment</button>
+                    <button type="button" class="w_btn01 w_btn_c_o" ng-click="opra_change(4)">Invoice</button>
+                    <button type="button" class="w_btn01 w_btn_c_o" ng-click="opra_change(5)">Item By {{dn}}</button>
+                    <button type="button" class="w_btn01 w_btn_c_o" ng-click="opra_change(6)">Setting</button>
+                    <!--<button type="button" class="w_btn01 w_btn_c_b" ng-click="print()">print</button>-->
+
+                </td>
+                <td> <button type="button" class="w_btn01 w_btn_c_b" ng-click="home_clk()">HOME</button></td>
+                <td style="float:right;"> <button type="button" class="w_btn01 w_btn_c_o" ng-click="exit()">Exit</button></td>
+            </tr>
+        </table>
+
+    </div>
+    <div style="margin:10px" ng-show="opra == 1">
+        <div>
+            <table style="width:99%;margin:5px 10px 0 10px;border-collapse:collapse;">
+                <tr>
+                    <td class="tb_td" style="vertical-align:top;">
+                        <div ng-show="cat_lst" style="min-height: 900px !important;">
+                            <h2>Category's</h2>
+                            <button type="button" class="cat_btn" ng-repeat="xx in load_cat" ng-click="sel_cat(xx)">{{xx.n}}</button>
+
+                        </div>
+                        <div ng-hide="cat_lst" style="min-height: 900px !important;">
+                            <table style="width:50%;margin:10px;">
+                                <tr>
+                                    <td><h2>Items By {{cat_n}}</h2></td>
+                                    <td><button type="button" class="w_btn01 w_btn_c_o" ng-click="all_cat_view()">All Category</button></td>
+                                </tr>
+                            </table>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    Items Comments
+                                </span>
+                                <input type="text" ng-model="i_c" style="font-size:20px;">
+                            </div>
+                            <div style="margin-top:5px;">
+                                <button type="button" class="btn_prod" ng-repeat="xx in load_pro" ng-click="add_item_inv(xx)">
+                                    <p>{{xx.n}}</p>
+                                    <p style="font-size:0.7em;display:inline-block;">Rs:- </p>
+                                    <p style="font-size: 0.7em; display: inline-block;" ng-class="{line_on:xx.sp != xx.dis_v}">{{xx.sp}}</p>
+                                    <p style="font-size: 0.7em; display: inline-block;color:#b6ff00;" ng-hide="xx.sp == xx.dis_v">{{xx.dis_v}}</p>
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                    </td>
+                    <td class="tb_td" style="width: 25%; vertical-align: top;">
+                        <button type="button" class="btn_prod" ng-hide="bill == '' || bill == null || bill.length < 0" ng-click="finsh_bill()">
+                            Finish
+                        </button>
+                        <table style="width: 99%; border-collapse: collapse;">
+                            <tr>
+                                <td class="tb_td">#</td>
+                                <td class="tb_td">Item's</td>
+                                <td class="tb_td" style="text-align:center;">Price</td>
+                                <td class="tb_td" style="text-align:center;">Qty</td>
+                                <td class="tb_td">Total</td>
+                            </tr>
+                            <tr ng-repeat="x in bill">
+                                <td class="tb_td">{{$index+1}}</td>
+                                <td class="tb_td" ng-click="remove_item_inv(x)">{{x.pn}}</td>
+                                <td class="tb_td" style="text-align:right;"><div ng-class="{line_on:x.sp != x.dis_v}" ng-hide="x.sp == x.dis_v" style="display:inline-block;">{{x.sp}}&nbsp;</div> <div style="display:inline-block;">{{x.dis_v}}</div></td>
+                                <td class="tb_td" style="text-align:center;">{{x.q}}</td>
+                                <td class="tb_td" style="text-align:right;">{{x.tot | currency:''}}</td>
+                            </tr>
+                            <tr ng-repeat="xx in bill_poot">
+                                <td class="tb_td"></td>
+                                <td class="tb_td">{{xx.n}}</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{xx.v | currency:''}}</td>
+                            </tr>
+                            <!--<tr>
+                                <td class="tb_td"></td>
+                                <td class="tb_td">Total</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{total | currency:''}}</td>
+                            </tr>
+                            <tr>
+                                <td class="tb_td"></td>
+                                <td class="tb_td">Service {{service_fee}}%</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{serv_chg | currency:''}}</td>
+                            </tr>
+                            <tr>
+                                <td class="tb_td"></td>
+                                <td class="tb_td">Grand Total</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{grand_tot | currency:''}}</td>
+                            </tr>-->
+
+                        </table>
+
+
+
+
+                    </td>
+
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <div style="margin:10px;border:solid 2px #ffffff;min-height:900px;" ng-show="opra == 2">
+        <div>
+            <div style="width:99%;text-align:center;">
+                <button type="button" class="btn_04" ng-click="main_btn_call(1)">Table's</button>
+                <button type="button" class="btn_04" ng-click="main_btn_call(2)">Pending</button>
+            </div>
+            <div ng-show="main_sel == 1">
+                <div style="margin-top:5px;" ng-show="tb_view == 1">
+                    <div>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == ''}" ng-click="tb_search('')">All</button>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == 'B.g'}" ng-click="tb_search('B.g')">Bar G</button>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == 'Co.g'}" ng-click="tb_search('Co.g')">Coffee g</button>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == 'VI'}" ng-click="tb_search('VI')">VIP</button>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == 'Coffee AC '}" ng-click="tb_search('Coffee AC ')">VVIP</button>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == 'CP '}" ng-click="tb_search('CP ')">Park</button>
+                        <button type="button" class="w_btn01 w_btn_c_b" ng-class="{  w_btn_c_o: tb_search_d == 'HO '}" ng-click="tb_search('HO ')">Horse</button>
+
+
+                    </div>
+                    <button type="button" class="w_btn_02" ng-repeat="xx in load_tb  | filter:tb_search_d" ng-click="sel_tb(xx)" ng-class="{ w_Tb_bk_c: xx.u != 0}"><p>{{xx.n}}</p><p style="font-size:0.7em;">{{xx.un}}</p></button>
+                </div>
+                <div ng-show="tb_view == 2">
+                    <div style="font-size:2em;color:ghostwhite;width:99%;text-align:center;padding:10px;">{{seled_tb}}</div>
+                    <div class="tab">
+                        <button class="tablinks" id="b1" onclick="openCity(event, 'London')">Items</button>
+                        <button class="tablinks" onclick="openCity(event, 'Paris')">Add New</button>
+                        <button type="button" class="tablinks w_btn_c_o" ng-click="all_tb_view()">All Tables</button>
+                    </div>
+
+                    <div id="London" class="tabcontent">
+                        <div style="height:80px;">
+                            <h3>Items</h3>
+                            <button type="button" class="w_btn01 w_btn_c_b" style="float:right;margin:-15px 50px;" ng-hide="tb_billing == 1 || item_by_tb == '' || item_by_tb == null || item_by_tb.length < 0" ng-click="change_tb_op()">
+                                Change Table
+                            </button>
+                            <button type="button" class="btn_prod" style="float:right;margin:-15px 50px;" ng-hide="tb_billing == 1 || item_by_tb == '' || item_by_tb == null || item_by_tb.length < 0" ng-click="finsh_bill_tb()">
+                                PRINT BILL
+                            </button>
+                        </div>
+
+                        <table style="width:99%;border-collapse:collapse;">
+                            <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in item_by_tb">
+                                <td class="tb_td">{{$index+1}}</td>
+                                <td class="tb_td" style="text-align:left;">{{xx.pn}}</td>
+                                <td class="tb_td" style="text-align:right;"><div ng-class="{line_on:xx.sp != xx.dis_v}" ng-hide="xx.sp == xx.dis_v" style="display:inline-block;">{{xx.sp}}&nbsp;</div> <div style="display:inline-block;">{{xx.dis_v}}</div></td>
+                                <td class="tb_td">{{xx.sn}}</td>
+                                <td class="tb_td">
+                                    <button type="button" ng-show="xx.r == 1" ng-hide="ul == 5" ng-click="Remove_i_c(xx,2)" class="btn_b_r">Remove</button>
+                                    <button type="button" ng-show="xx.r == 2" ng-click="Remove_i_c(xx,1)" class="btn_b_">No</button>
+                                    <button type="button" ng-show="xx.r == 2" style="float:right;" ng-click="del_item(xx)" class="btn_b_c">Yes</button>
+                                </td>
+                            </tr>
+                            <tr style="border:solid 1px;padding:2px;" ng-repeat="xxx in bill_poot">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">{{xxx.n}}</td>
+                                <td class="tb_td" style="text-align:right;">{{xxx.v | currency:''}}</td>
+                                <td class="tb_td"></td>
+                                <td class="tb_td"></td>
+                            </tr>
+
+
+                            <!--<tr style="border:solid 1px;padding:2px;">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">Total</td>
+                                <td class="tb_td" style="text-align:right;">{{tot | currency:''}}</td>
+                                <td class="tb_td"></td>
+                                <td class="tb_td"></td>
+                            </tr>
+                            <tr style="border:solid 1px;padding:2px;">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">Service {{s_ch_v}}%</td>
+                                <td class="tb_td" style="text-align:right;">{{s_chg | currency:''}}</td>
+                                <td class="tb_td"></td>
+                                <td class="tb_td"></td>
+                            </tr>
+                            <tr style="border:solid 1px;padding:2px;">
+                                <td class="tb_td"></td>
+                                <td class="tb_td" style="text-align:left;">Total</td>
+                                <td class="tb_td" style="text-align:right;font-weight:bolder;">{{g_tot | currency:''}}</td>
+                                <td class="tb_td"></td>
+                                <td class="tb_td"></td>
+                            </tr>-->
+                        </table>
+                        <div>
+                            <div class="input-group" style="margin:5px;">
+                                <span class="input-group-addon">
+                                    Bill Discount
+                                </span>
+                                <input type="text" style="text-align:center;height:30px;" ng-model="bdis" ng-change="read_discount_val()">
+                                <button type="button" class="w_btn01 w_btn_c_b" ng-click="make_discount()">Update</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div id="Paris" class="tabcontent">
+                        <div style="margin:5px 0 5px 0" ng-hide="new_order == '' || new_order == null || new_order.length < 0">
+                            <div>
+                                <button type="button" class="new_ite" ng-repeat="xx in new_order" ng-click="remove_item(xx)">
+                                    <p>{{xx.n}}</p><p style="font-size:0.7em;">Rs:- {{xx.dis_v}}</p>
+                                </button>
+                            </div>
+                            <div style="margin:10px 0 10px 0;">
+                                <button type="button" class="w_btn01 w_btn_c_b" ng-click="order_save()">Order</button>
+                            </div>
+                            <hr />
+                        </div>
+
+                        <div ng-show="cat_lst">
+                            <h3>Add New</h3>
+                            <button type="button" class="cat_btn" ng-repeat="xx in load_cat" ng-click="sel_cat(xx)">{{xx.n}}</button>
+                        </div>
+                        <div ng-hide="cat_lst">
+                            <div>Items <button type="button" class="w_btn01 w_btn_c_o" ng-click="all_cat_view()">Category</button></div>
+                            <div class="input-group" style="margin:5px;">
+                                <span class="input-group-addon">
+                                    Items Comments
+                                </span>
+                                <input type="text" ng-model="i_c" style="font-size:20px;">
+                            </div>
+                            <div style="margin-top:5px;">
+                                <button type="button" class="btn_prod" ng-repeat="xx in load_pro" ng-click="add_item(xx)">
+                                    <p>{{xx.n}}</p>
+                                    <p style="font-size:0.7em;display:inline-block;">Rs:- </p>
+                                    <p style="font-size: 0.7em; display: inline-block;" ng-class="{line_on:xx.sp != xx.dis_v}">{{xx.sp}}</p>
+                                    <p style="font-size: 0.7em; display: inline-block;color:#b6ff00;" ng-hide="xx.sp == xx.dis_v">{{xx.dis_v}}</p>
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="main_sel == 2" style="margin-top:5px">
+                <table style="width:99%;border-collapse:collapse;">
+                    <tr style="border:solid 1px;padding:2px;">
+                        <td class="tb_td">#</td>
+                        <td class="tb_td" style="text-align:left;">Item</td>
+                        <td class="tb_td">Table</td>
+                        <td class="tb_td">Status</td>
+                        <td class="tb_td">Time</td>
+                        <td class="tb_td">User</td>
+                    </tr>
+                    <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in item_by_waiter">
+                        <td class="tb_td">{{$index+1}}</td>
+                        <td class="tb_td" style="text-align:left;">{{xx.pn}}</td>
+                        <td class="tb_td">{{xx.tb_n}}</td>
+                        <td class="tb_td" style="padding:5px 0 5px 0;">{{xx.sn}}<button type="button" ng-click="iten_done(xx)" class="btn_05">DONE</button></td>
+                        <td class="tb_td">{{xx.dt | date:'h:mm a'}}</td>
+                        <td class="tb_td">{{xx.oun}}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+        </div>
+    </div>
+    <div style="margin:10px;border:solid 2px #ffffff;" ng-show="opra == 3">
+        <table style="width:99%">
+            <tr>
+                <td style="width: 50%; padding: 5px; vertical-align: top;">
+                    <table style="width:99%;border-collapse:collapse;">
+                        <tr style="border:solid 1px;padding:2px;">
+                            <td class="tb_td">#</td>
+                            <td class="tb_td" style="text-align:left;">Inv</td>
+                            <td class="tb_td">Table</td>
+                            <td class="tb_td">Steward</td>
+                            <td class="tb_td">Time</td>
+                            <td class="tb_td">Print By</td>
+                            <td class="tb_td">Total</td>
+                        </tr>
+                        <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in pay_pen_inv" ng-click="load_inv_data(xx)">
+                            <td class="tb_td">{{$index+1}}</td>
+                            <td class="tb_td" style="text-align:left;">{{xx.inv}}</td>
+                            <td class="tb_td">{{xx.tn}}</td>
+                            <td class="tb_td">{{xx.st}}</td>
+                            <td class="tb_td">{{xx.dt | date:'h:mm a'}}</td>
+                            <td class="tb_td">{{xx.pu}}</td>
+                            <td class="tb_td">{{xx.tot}}</td>
+                        </tr>
+
+                    </table>
+                </td>
+                <td style="vertical-align: top;">
+                    <div ng-hide="grand_tot == '' || grand_tot == null || grand_tot.length < 0">
+
+                        <button type="button" class="btn_prod" ng-click="finsh_bill_do()">
+                            Finish
+                        </button>
+                        <div style="margin:5px;font-weight:bolder;">
+                            {{view_inv}}
+                            <div>{{grand_tot | currency:''}}</div>
+                        </div>
+                        <!--<table style="width: 99%; border-collapse: collapse;">
+                            <tr>
+                                <td class="tb_td">#</td>
+                                <td class="tb_td">Item's</td>
+                                <td class="tb_td" style="text-align:center;">Price</td>
+                                <td class="tb_td" style="text-align:center;">Qty</td>
+                                <td class="tb_td">Total</td>
+                            </tr>
+                            <tr ng-repeat="x in bill">
+                                <td class="tb_td">{{$index+1}}</td>
+                                <td class="tb_td" >{{x.pn}}</td>
+                                <td class="tb_td" style="text-align:right;"><div ng-class="{line_on:x.sp != x.dis_v}" ng-hide="x.sp == x.dis_v" style="display:inline-block;">{{x.sp}}&nbsp;</div> <div style="display:inline-block;">{{x.dis_v}}</div></td>
+                                <td class="tb_td" style="text-align:center;">{{x.q}}</td>
+                                <td class="tb_td" style="text-align:right;">{{x.tot | currency:''}}</td>
+                            </tr>
+                            <tr>
+                                <td class="tb_td"></td>
+                                <td class="tb_td">Total</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{total | currency:''}}</td>
+                            </tr>
+                            <tr>
+                                <td class="tb_td"></td>
+                                <td class="tb_td">Service {{service_fee}}%</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{s_chg | currency:''}}</td>
+                            </tr>
+                            <tr>
+                                <td class="tb_td"></td>
+                                <td class="tb_td">Grand Total</td>
+                                <td class="tb_td" style="text-align:right;"></td>
+                                <td class="tb_td" style="text-align:center;"></td>
+                                <td class="tb_td" style="text-align:right;">{{grand_tot | currency:''}}</td>
+                            </tr>
+
+                        </table>-->
+
+                    </div>
+
+
+
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div style="margin:10px;border:solid 2px #ffffff;" ng-show="opra == 4">
+        <table style="width:99%">
+            <tr>
+                <td style="width: 50%; padding: 5px; vertical-align: top;">
+                    <table style="width:99%;border-collapse:collapse;">
+                        <tr style="border:solid 1px;padding:2px;">
+                            <td class="tb_td">#</td>
+                            <td class="tb_td" style="text-align:left;">Inv</td>
+                            <td class="tb_td">Table</td>
+                            <td class="tb_td">Time</td>
+                            <td class="tb_td">Cash</td>
+                            <td class="tb_td">Card</td>
+                            <td class="tb_td">Total</td>
+                        </tr>
+                        <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in CashInvLst" ng-class="{  w_btn_c_o: xx.sel == 1}" ng-click="load_data_01(xx)">
+                            <td class="tb_td">{{$index+1}}</td>
+                            <td class="tb_td" style="text-align:left;">{{xx.inv}}</td>
+                            <td class="tb_td">{{xx.tbn}}</td>
+                            <td class="tb_td">{{xx.dt | date:'MM/dd h:mm a'}}</td>
+                            <td class="tb_td" style="text-align:right;padding:0 5px 0 5px;">{{xx.cash | currency :''}}</td>
+                            <td class="tb_td" style="text-align: right; padding: 0 5px 0 5px;">{{xx.card | currency :''}}</td>
+                            <td class="tb_td" style="text-align: right; padding: 0 5px 0 5px;">{{xx.tot | currency :''}}</td>
+                        </tr>
+                        <tr style="border:solid 1px;padding:2px;">
+                            <td class="tb_td"></td>
+                            <td class="tb_td"></td>
+                            <td class="tb_td"></td>
+                            <td class="tb_td">Total</td>
+                            <td class="tb_td" style="text-align:right;padding:0 5px 0 5px;">{{cash | currency :''}}</td>
+                            <td class="tb_td" style="text-align: right; padding: 0 5px 0 5px;">{{card | currency :''}}</td>
+                            <td class="tb_td" style="text-align: right; padding: 0 5px 0 5px;">{{tot | currency :''}}</td>
+                        </tr>
+
+                    </table>
+                </td>
+                <td style="vertical-align: top;">
+                    <h4>{{inv_info}}</h4>
+                    <table style="width:99%;border-collapse:collapse;">
+                        <tr style="border:solid 1px;padding:2px;">
+                            <td class="tb_td">#</td>
+                            <td class="tb_td">Item</td>
+                            <td class="tb_td">Price</td>
+                            <td class="tb_td">Qty</td>
+                            <td class="tb_td" style="text-align:left;">Total</td>
+                        </tr>
+                        <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in InvDataV">
+                            <td class="tb_td">{{$index+1}}</td>
+                            <td class="tb_td">{{xx.pn}}</td>
+                            <td class="tb_td" style="padding:0 5px 0 5px;">{{xx.dis_v | currency :''}}</td>
+                            <td class="tb_td" style=" padding: 0 5px 0 5px;">{{xx.q | currency :''}}</td>
+                            <td class="tb_td" style="text-align: right; padding: 0 5px 0 5px;">{{xx.tot | currency :''}}</td>
+                        </tr>
+
+
+                    </table>
+
+
+
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div style="margin:10px;border:solid 2px #ffffff;" ng-show="opra == 5">
+        <table style="width:100%">
+            <tr>
+                <td style="width:50%;padding:5px;vertical-align:top;">
+                    <h3>By Kitchen</h3>
+                    <table style="width:99%;border-collapse:collapse;">
+                        <tr style="border:solid 1px;padding:2px;">
+                            <td class="tb_td">#</td>
+                            <td class="tb_td">Item</td>
+                            <td class="tb_td">Qty</td>
+                        </tr>
+                        <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in kich">
+                            <td class="tb_td">{{$index+1}}</td>
+                            <td class="tb_td">{{xx.pn}}</td>
+                            <td class="tb_td" style="text-align:right;padding:0 5px 0 5px;">{{xx.q }}</td>
+                        </tr>
+                    </table>
+
+                </td>
+                <td style="width:50%;padding:5px;vertical-align:top;">
+                    <h3>By Beverages</h3>
+                    <table style="width:99%;border-collapse:collapse;">
+                        <tr style="border:solid 1px;padding:2px;">
+                            <td class="tb_td">#</td>
+                            <td class="tb_td">Item</td>
+                            <td class="tb_td">Qty</td>
+                        </tr>
+                        <tr style="border:solid 1px;padding:2px;" ng-repeat="xx in beema">
+                            <td class="tb_td">{{$index+1}}</td>
+                            <td class="tb_td">{{xx.pn}}</td>
+                            <td class="tb_td" style="text-align:right;padding:0 5px 0 5px;">{{xx.q }}</td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+
+
+    <div style="margin:10px;border:solid 2px #ffffff;" ng-show="opra == 6">
+        <div style="margin:10px;">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    Take Away Service Fee
+                </span>
+                <input type="text" ng-model="service_fee" style="font-size:20px;text-align:right;">
+            </div>
+        </div>
+
+        <div style="margin:10px;">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    Dayend
+                </span>
+                <button type="button"  class="w_btn01 w_btn_c_b" ng-click="open_dayend()">Dayend</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-hide="true">
+        <div id="print" style="width:500px;text-align:center;border:solid 1px;">
+            <img src="logo_bnw.png" style="width:250px;" />
+            <div style="font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No 120, Baladaksha Mawatha, Colombo 1.</div>
+            <div style="font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0777 931 639 / 0777 931 683</div>
+            <div style="font-size:14px;padding-bottom:5px;border-bottom:solid 2px;margin-top:10px;">{{dt}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #{{invoice_no}}</div>
+            <div style="font-size:14px;margin-top:20px;"></div>
+            <div style="margin-right:10px;">
+                <div ng-repeat="x in bill">
+                    <div style="font-size:14px;padding:5px 0 0 0;font-weight:bolder;">{{x.pn}}</div>
+                    <div>
+                        <div style="font-size:14px;padding:0 0 5px 0;display:inline-block;"><div ng-hide="x.sp == x.dis_v" style="display: inline-block; text-decoration: line-through #000000 1px;">{{x.sp}}&nbsp;</div> <div style="display:inline-block;">{{x.dis_v}}</div> X {{x.q}}</div>
+                        <div style="font-size: 14px; display: inline-block; float: right">{{x.tot | currency:'':2}}</div>
+                    </div>
+                </div>
+                <div style="width: 99%; border-top: solid 2px; margin-top: 5px;"></div>
+                <div style="margin-top:5px;" ng-repeat="xx in bill_poot">
+                    <div style="font-size:14px;display:inline-block;">{{xx.n}}</div>
+                    <div style="font-size: 14px; display: inline-block;float: right;font-weight:bolder;">{{xx.v | currency:''}}</div>
+                </div>
+                <!--<div style="margin-top: 5px;">
+                    <div style="font-size:14px;display:inline-block;">Total</div>
+                    <div style="font-size: 14px; display: inline-block;float: right">{{total | currency:''}}</div>
+                </div>
+                <div style="margin-top:5px;">
+                    <div style="font-size:14px;display:inline-block;">Service Fee {{service_fee}}%</div>
+                    <div style="font-size: 14px; display: inline-block;float: right">{{serv_chg | currency:''}}</div>
+                </div>
+                <div style="margin-top:5px;">
+                    <div style="font-size:16px;display:inline-block;font-weight:bolder;">Grand Total</div>
+                    <div style="font-size: 16px; display: inline-block; font-weight: bolder; float: right">{{grand_tot | currency:''}}</div>
+                </div>-->
+                <div style="margin-top:5px;width:99%;text-align:center !important;">
+                    <div style="font-size:14px;">THANK YOU !</div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        document.getElementById('London').style.display = "block";
+        document.getElementById('b1').classList.add('active');
+
+
+    </script>
+</body>
+
+</html>
