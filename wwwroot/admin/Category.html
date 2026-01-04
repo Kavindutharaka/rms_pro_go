@@ -4,86 +4,135 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Category</title>
-    <link rel="icon" type="image/x-icon" href="../ico.ico"> 
-    <link href="../css/com.css" rel="stylesheet" />
+    <title>Category Management - RMS Pro</title>
+    <link rel="icon" type="image/x-icon" href="../ico.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="../support/angular.min.js"></script>
     <script src="./Category.js"></script>
-
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
 </head>
 
-<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl">
-    <div class="card">
-        <strong>Add Or Edit Category</strong>
-
-        <div></div>
-        <div class="row">
-            <div class="column">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        Name
-                    </span>
-                    <input type="text" ng-model="n" style="text-align:center !important;">
-
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        Status
-                    </span>
-                    <select ng-model="s" style="text-align:center !important;">
-                        <option value="1">On</option>
-                        <option value="2">Off</option> 
-                    </select>
-                </div>
-                <div style="text-align:center; width:100%;color:red;padding:5px;" ng-show="msg_d">
-                    {{msg}}
-                </div>
-                <div class="input-group">
-                    <button style="margin-left:120px;" class="bnt_g" ng-disabled="n == '' || n == null || n.length < 3" ng-click="change()">{{btn_txt}}</button>
-                    <button style="margin-left:10px;" class="bnt_o" ng-click="new_data()">New</button>
-                </div>
-
-
-                <!--<div class="input-group">
-        <span class="input-group-addon">
-            Name
-        </span>
-        <input type="text" value="4.99">
-        <button>Go</button>
-    </div>-->
-
-
-            </div>
-            <div class="column">
-                <div class="input-group" style="margin-bottom:5px;">
-                    <span class="input-group-addon">
-                        Search
-                    </span>
-                    <input type="text" ng-model="sarch" style="text-align:center !important;">
-                </div>
-                <table class="fl-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="ee in cat_lst | filter:sarch" ng-click="view(ee)">
-                            <td>{{ee.n}}</td>
-                            <td>{{ee.si}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<body ng-app="RMSApp" ng-cloak ng-controller="HomeCtrl" class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Page Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+                <svg class="w-8 h-8 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                </svg>
+                Category Management
+            </h1>
+            <p class="text-gray-600 mt-1">Add, edit, and manage product categories</p>
         </div>
 
-       
+        <!-- Main Content Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="grid md:grid-cols-2 gap-6 p-6">
+                <!-- Left Column - Form -->
+                <div class="space-y-4">
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-lg -mt-6 -ml-6 -mr-6 mb-6">
+                        <h2 class="text-xl font-semibold">Add or Edit Category</h2>
+                    </div>
 
-        <!--<p>W <strong>Glassmorphism UI design</strong> trend.</p>
-        <p class="card-footer">Created by Rahul C.</p>-->
+                    <!-- Name Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+                        <input
+                            type="text"
+                            ng-model="n"
+                            placeholder="Enter category name"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-200"
+                        />
+                    </div>
+
+                    <!-- Status Select -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select
+                            ng-model="s"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-200"
+                        >
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Message Alert -->
+                    <div ng-show="msg_d" class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                        <p class="text-blue-700 font-medium">{{msg}}</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 pt-4">
+                        <button
+                            ng-disabled="n == '' || n == null || n.length < 3"
+                            ng-click="change()"
+                            class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-2.5 px-4 rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
+                        >
+                            {{btn_txt}}
+                        </button>
+                        <button
+                            ng-click="new_data()"
+                            class="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold py-2.5 px-4 rounded-lg hover:from-orange-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition duration-200"
+                        >
+                            New
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column - Table -->
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg -mt-6 -mr-6 -ml-6 mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">Categories List</h2>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                        <input
+                            type="text"
+                            ng-model="sarch"
+                            placeholder="Search categories..."
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-200"
+                        />
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gradient-to-r from-blue-600 to-indigo-600">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr
+                                    ng-repeat="ee in cat_lst | filter:sarch"
+                                    ng-click="view(ee)"
+                                    class="hover:bg-blue-50 cursor-pointer transition duration-150"
+                                >
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ee.n}}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <span ng-if="ee.si == 'On'" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            {{ee.si}}
+                                        </span>
+                                        <span ng-if="ee.si != 'On'" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            {{ee.si}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </body>
 
 </html>

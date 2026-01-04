@@ -1,0 +1,309 @@
+/* Modern RMS Pro Styles */
+/* This file contains custom styles that complement Tailwind CSS */
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+/* Waiter Page Specific Styles */
+.w_btn01 {
+    display: inline-block;
+    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.w_btn01:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.w_btn_c_b {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.w_btn_c_o {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.w_btn_c_r {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.w_btn_02 {
+    display: inline-block;
+    padding: 12px 16px;
+    margin: 6px;
+    min-width: 100px;
+    min-height: 100px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid #e2e8f0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.w_btn_02:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    border-color: #4299e1;
+}
+
+.w_Tb_bk_c {
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    color: white;
+}
+
+.tab {
+    display: flex;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 1rem;
+}
+
+.tab button {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a5568;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.tab button:hover {
+    color: #2d3748;
+    background: #f7fafc;
+}
+
+.tab button.active {
+    color: #4299e1;
+    border-bottom-color: #4299e1;
+}
+
+.tabcontent {
+    display: none;
+    padding: 1rem 0;
+}
+
+.cat_btn {
+    display: inline-block;
+    padding: 16px 24px;
+    margin: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cat_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn_prod {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn_prod:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.new_ite {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 4px;
+    background: white;
+    border: 2px solid #cbd5e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.new_ite:hover {
+    border-color: #4299e1;
+    background: #ebf8ff;
+}
+
+.btn_04 {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn_04:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tb_td {
+    border: 1px solid #e2e8f0;
+    padding: 8px;
+    color: white;
+}
+
+.btn_05 {
+    padding: 6px 12px;
+    background: #ffd700;
+    border: 1px solid #e6c200;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn_05:hover {
+    background: #ffed4e;
+}
+
+/* Cashier Page Specific Styles */
+.button-10 {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.button-10:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn_b_c {
+    background: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
+}
+
+.btn_b_r {
+    background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+}
+
+.btn_c_or {
+    background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+}
+
+.w_btn_c_br {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+.num_pad {
+    font-size: 28px;
+    margin: 6px;
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.num_pad:hover {
+    background: #f7fafc;
+    border-color: #4299e1;
+    transform: scale(1.05);
+}
+
+.line_on {
+    text-decoration: line-through #000000 1px;
+}
+
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Utility Classes */
+.bnt_g {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.bnt_o {
+    background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .w_btn_02 {
+        min-width: 80px;
+        min-height: 80px;
+        font-size: 14px;
+    }
+
+    .cat_btn {
+        font-size: 16px;
+        padding: 12px 18px;
+    }
+
+    .num_pad {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+}
